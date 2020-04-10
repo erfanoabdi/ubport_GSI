@@ -17,10 +17,14 @@ mount /data/rootfs.img /r;
 ui_print "Setting udev rules";
 cat /s/ueventd*.rc /vendor/ueventd*.rc | grep ^/dev | sed -e 's/^\/dev\///' | awk '{printf "ACTION==\"add\", KERNEL==\"%s\", OWNER=\"%s\", GROUP=\"%s\", MODE=\"%s\"\n",$1,$3,$4,$2}' | sed -e 's/\r//' > /r/etc/udev/rules.d/70-ubport.rules;
 
-ui_print "Setting phone DPI";
-echo "GRID_UNIT_PX=24" >> /r/etc/ubuntu-touch-session.d/android.conf;
-echo "QTWEBKIT_DPR=2.0" >> /r/etc/ubuntu-touch-session.d/android.conf;
-echo "FORM_FACTOR=handset" >> /r/etc/ubuntu-touch-session.d/android.conf;
+if grep -q ro.sf.lcd_density /vendor/build.prop; then
+    PX=`grep ro.sf.lcd_density /vendor/build.prop | cut -d "=" -f 2 | awk '{$1=int($1/20);printf $1}'`;
+    DPR=`grep ro.sf.lcd_density /vendor/build.prop | cut -d "=" -f 2 | awk '{$1=int($1/20);$1=$1/10.0;printf $1}'`;
+    ui_print "Setting phone DPI";
+    echo "GRID_UNIT_PX=$PX" >> /r/etc/ubuntu-touch-session.d/android.conf;
+    echo "QTWEBKIT_DPR=$DPR" >> /r/etc/ubuntu-touch-session.d/android.conf;
+    echo "FORM_FACTOR=handset" >> /r/etc/ubuntu-touch-session.d/android.conf;
+fi
 
 umount /r;
 umount /s;
