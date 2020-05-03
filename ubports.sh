@@ -29,4 +29,6 @@ if grep -q ro.sf.lcd_density /vendor/build.prop; then
 fi
 umount /r;
 
+mv /data/system.img /data/android-rootfs.img
+
 ## end install
