@@ -32,7 +32,7 @@ umount /r;
 mv /data/system.img /data/android-rootfs.img
 
 ui_print "Resizing rootfs to 8GB";
-e2fsck -f /data/rootfs.img
+e2fsck -fy /data/rootfs.img
 resize2fs /data/rootfs.img 8G
 
 ## end install
