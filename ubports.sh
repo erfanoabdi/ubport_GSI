@@ -9,6 +9,9 @@ ui_print() { echo -e "ui_print $1\nui_print" > $OUTFD; }
 
 cp -fpr /data/ubports/data/* /data/;
 
+touch /data/.writable_device_image;
+touch /data/.writable_image;
+
 mkdir /s;
 mkdir /r;
 
