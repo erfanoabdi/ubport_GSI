@@ -19,13 +19,13 @@ umount /s;
 
 mount /data/rootfs.img /r;
 mv /data/70-ubport.rules /r/etc/udev/rules.d/70-ubport.rules;
+echo "FORM_FACTOR=handset" >> /r/etc/ubuntu-touch-session.d/android.conf;
 if grep -q ro.sf.lcd_density /vendor/build.prop; then
     PX=`grep ro.sf.lcd_density /vendor/build.prop | cut -d "=" -f 2 | awk '{$1=int($1/20);printf $1}'`;
     DPR=`grep ro.sf.lcd_density /vendor/build.prop | cut -d "=" -f 2 | awk '{$1=int($1/20);$1=$1/10.0;printf $1}'`;
     ui_print "Setting phone DPI";
     echo "GRID_UNIT_PX=$PX" >> /r/etc/ubuntu-touch-session.d/android.conf;
     echo "QTWEBKIT_DPR=$DPR" >> /r/etc/ubuntu-touch-session.d/android.conf;
-    echo "FORM_FACTOR=handset" >> /r/etc/ubuntu-touch-session.d/android.conf;
 fi
 umount /r;
 
